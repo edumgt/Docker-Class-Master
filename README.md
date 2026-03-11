@@ -1,9 +1,4 @@
-# Docker Fundamentals & On-Prem DevSecOps Lab
-
-> Docker 기본 학습(1~5), 온프레미스 DevSecOps 연동(6~11), 확장 커리큘럼(12~25)까지 난이도 순으로 학습하는 통합 레포지토리
-
-> [!NOTE]
-> 이 문서는 기존 메인 안내/운영 가이드를 병합해 정리한 통합 문서입니다.
+# Docker Class Master
 
 ## 목차
 - [1. 학습 로드맵](#1-학습-로드맵)
