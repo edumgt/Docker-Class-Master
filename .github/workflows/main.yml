@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          declare -a TOPICS=()
+          declare -a TOPICS=("docker")
 
           add_topic() {
             local topic="$1"
