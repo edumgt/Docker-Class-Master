@@ -1,6 +1,6 @@
 # Docker Fundamentals & On-Prem DevSecOps Lab
 
-> Docker 기본 학습(1~5), 온프레미스 DevSecOps 연동(6~11), 확장 실습(12~13)까지 한 흐름으로 실습하는 통합 레포지토리
+> Docker 기본 학습(1~5), 온프레미스 DevSecOps 연동(6~11), 확장 커리큘럼(12~25)까지 난이도 순으로 학습하는 통합 레포지토리
 
 > [!NOTE]
 > 이 문서는 기존 메인 안내/운영 가이드를 병합해 정리한 통합 문서입니다.
@@ -15,8 +15,8 @@
 - [7. WSL 포트 80 트러블슈팅](#7-wsl-포트-80-트러블슈팅)
 - [8. Docker 이미지 목록](#8-docker-이미지-목록)
 - [9. 대상 독자와 도입 로드맵](#9-대상-독자와-도입-로드맵)
-- [10. 12번 폴더: OnPrem ERP 파트](#10-12번-폴더-onprem-erp-파트)
-- [11. 13번 폴더: Advanced 파트](#11-13번-폴더-advanced-파트)
+- [10. 확장 커리큘럼 맵 (12~25)](#10-확장-커리큘럼-맵-1225)
+- [11. 공용 리소스 폴더](#11-공용-리소스-폴더)
 
 ---
 
@@ -35,8 +35,20 @@
 | 09 | Nexus Repository 온프레미스 구축 | [09-Nexus-Repository-On-Prem](./09-Nexus-Repository-On-Prem/README.md) |
 | 10 | Drone CI 온프레미스 구축 | [10-Drone-CI-On-Prem](./10-Drone-CI-On-Prem/README.md) |
 | 11 | 통합 DevSecOps Lab | [11-Integrated-DevSecOps-Lab](./11-Integrated-DevSecOps-Lab/README.md) |
-| 12 | OnPrem ERP 통합 실습 | [12-Docker-OnPrem-ERP](./12-Docker-OnPrem-ERP/README.md) |
-| 13 | Docker Advanced Example 실습 | [13-Docker-Advanced-Example](./13-Docker-Advanced-Example/README.md) |
+| 12 | Advanced Day01: Docker 개요 & 첫 걸음 | [12-Advanced-Day01-Container-Basics](./12-Advanced-Day01-Container-Basics/README.md) |
+| 13 | Advanced Day02: 컨테이너 심화 | [13-Advanced-Day02-Container-DeepDive](./13-Advanced-Day02-Container-DeepDive/README.md) |
+| 14 | Advanced Day03: 이미지 빌드 기초 | [14-Advanced-Day03-Image-Build](./14-Advanced-Day03-Image-Build/README.md) |
+| 15 | Advanced Day04: 이미지 최적화 | [15-Advanced-Day04-Image-Optimization](./15-Advanced-Day04-Image-Optimization/README.md) |
+| 16 | Advanced Day05: 네트워킹 | [16-Advanced-Day05-Networking](./16-Advanced-Day05-Networking/README.md) |
+| 17 | Advanced Day06: 스토리지/백업복구 | [17-Advanced-Day06-Storage-Backup](./17-Advanced-Day06-Storage-Backup/README.md) |
+| 18 | Advanced Day07: Compose 실전 | [18-Advanced-Day07-Compose-Practice](./18-Advanced-Day07-Compose-Practice/README.md) |
+| 19 | Advanced Day08: 디버깅/운영 | [19-Advanced-Day08-Debugging-Operations](./19-Advanced-Day08-Debugging-Operations/README.md) |
+| 20 | Advanced Day09: Jenkins CI | [20-Advanced-Day09-Jenkins-CI](./20-Advanced-Day09-Jenkins-CI/README.md) |
+| 21 | OnPrem Solution: Odoo | [21-OnPrem-Solution-Odoo](./21-OnPrem-Solution-Odoo/README.md) |
+| 22 | OnPrem Solution: ERPNext | [22-OnPrem-Solution-ERPNext](./22-OnPrem-Solution-ERPNext/README.md) |
+| 23 | OnPrem Solution: Tryton | [23-OnPrem-Solution-Tryton](./23-OnPrem-Solution-Tryton/README.md) |
+| 24 | OnPrem Solution: Taiga | [24-OnPrem-Solution-Taiga](./24-OnPrem-Solution-Taiga/README.md) |
+| 25 | OnPrem Solution: Zulip | [25-OnPrem-Solution-Zulip](./25-OnPrem-Solution-Zulip/README.md) |
 
 ---
 
@@ -311,20 +323,43 @@ sudo ss -ltnp 'sport = :80'
 
 ---
 
-## 10. 12번 폴더: OnPrem ERP 파트
+## 10. 확장 커리큘럼 맵 (12~25)
 
-`https://github.com/edumgt/Docker-OnPrem-ERP.git`의 전체 내용을 아래 경로로 병합했습니다.
+난이도 순 확장 실습 구조:
+- `12~20`: Advanced Day01~Day09
+- `21~25`: OnPrem 솔루션별 소스 학습(odoo, erpnext, tryton, taiga, zulip)
 
-- `12-Docker-OnPrem-ERP/`
-- 시작 문서: `12-Docker-OnPrem-ERP/README.md`
-- 주요 실행 파일: `12-Docker-OnPrem-ERP/start.sh`, `12-Docker-OnPrem-ERP/stop.sh`, `12-Docker-OnPrem-ERP/docker-compose.yml`
+### Advanced 파트 (12~20)
+| 번호 | 폴더 | 핵심 주제 |
+|---|---|---|
+| 12 | `12-Advanced-Day01-Container-Basics` | Docker 기초/첫 실행 |
+| 13 | `13-Advanced-Day02-Container-DeepDive` | 프로세스/자원/IO |
+| 14 | `14-Advanced-Day03-Image-Build` | Dockerfile/이미지 빌드 |
+| 15 | `15-Advanced-Day04-Image-Optimization` | 멀티스테이지/최적화 |
+| 16 | `16-Advanced-Day05-Networking` | 브리지/DNS/통신 |
+| 17 | `17-Advanced-Day06-Storage-Backup` | 볼륨/백업/복구 |
+| 18 | `18-Advanced-Day07-Compose-Practice` | Compose 실전 |
+| 19 | `19-Advanced-Day08-Debugging-Operations` | 장애 분석/Runbook |
+| 20 | `20-Advanced-Day09-Jenkins-CI` | CI 파이프라인 |
+
+### OnPrem 솔루션 파트 (21~25)
+| 번호 | 폴더 | 솔루션 |
+|---|---|---|
+| 21 | `21-OnPrem-Solution-Odoo` | Odoo |
+| 22 | `22-OnPrem-Solution-ERPNext` | ERPNext |
+| 23 | `23-OnPrem-Solution-Tryton` | Tryton |
+| 24 | `24-OnPrem-Solution-Taiga` | Taiga |
+| 25 | `25-OnPrem-Solution-Zulip` | Zulip |
 
 ---
 
-## 11. 13번 폴더: Advanced 파트
+## 11. 공용 리소스 폴더
 
-`https://github.com/edumgt/Docker-Advanced-Example.git`의 전체 내용을 아래 경로로 병합했습니다.
+커리큘럼 폴더(12~25)와 별도로, 원본 병합 레포의 공용 리소스는 아래에 유지합니다.
 
-- `13-Docker-Advanced-Example/`
-- 시작 문서: `13-Docker-Advanced-Example/README.md`
-- 주요 파일: `13-Docker-Advanced-Example/docker-compose.yml`, `13-Docker-Advanced-Example/labs/`, `13-Docker-Advanced-Example/docs/`
+- `_shared-advanced-core/`
+  - 공용 템플릿/문서/캡스톤 (`templates`, `docs`, `capstone`)
+  - `labs/dayXX`는 상위 커리큘럼 폴더(12~20)로 연결되는 링크
+- `_shared-onprem-core/`
+  - 통합 오케스트레이션(`docker-compose.yml`, `start.sh`, `stop.sh`, `sync-solutions.sh`)
+  - `solutions/*`는 상위 커리큘럼 폴더(21~25)로 연결되는 링크
