@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-03-01T05:17:08.171Z",
+  "mode": "official-product-ui",
+  "results": [
+    {
+      "solution": "odoo",
+      "status": "ok",
+      "notes": []
+    },
+    {
+      "solution": "erpnext",
+      "status": "ok",
+      "notes": []
+    },
+    {
+      "solution": "tryton",
+      "status": "ok",
+      "notes": []
+    },
+    {
+      "solution": "taiga",
+      "status": "ok",
+      "notes": []
+    },
+    {
+      "solution": "zulip",
+      "status": "ok",
+      "notes": []
+    }
+  ]
+}

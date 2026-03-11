@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks: [backend]
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://app:app@db:5432/app
+    depends_on:
+      - db
+    networks: [backend, frontend]
+
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks: [frontend]
+
+volumes:
+  db_data:
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge

@@ -1,12 +1,9 @@
 # Docker Fundamentals & On-Prem DevSecOps Lab
 
-> Docker 기본 학습(1~5)부터 온프레미스 DevSecOps 연동(6~11)까지 한 흐름으로 실습하는 통합 레포지토리
+> Docker 기본 학습(1~5), 온프레미스 DevSecOps 연동(6~11), 확장 실습(12~13)까지 한 흐름으로 실습하는 통합 레포지토리
 
 > [!NOTE]
-> 이 문서는 메인 폴더의 아래 3개 문서를 병합한 통합 가이드입니다.
-> - `README.md`
-> - `ONPREM_DOCKER_MIN_RESOURCES_AND_RELATIONS.md`
-> - `WSL_PORT80_PROCESS_FIND_AND_STOP.md`
+> 이 문서는 기존 메인 안내/운영 가이드를 병합해 정리한 통합 문서입니다.
 
 ## 목차
 - [1. 학습 로드맵](#1-학습-로드맵)
@@ -18,6 +15,8 @@
 - [7. WSL 포트 80 트러블슈팅](#7-wsl-포트-80-트러블슈팅)
 - [8. Docker 이미지 목록](#8-docker-이미지-목록)
 - [9. 대상 독자와 도입 로드맵](#9-대상-독자와-도입-로드맵)
+- [10. 12번 폴더: OnPrem ERP 파트](#10-12번-폴더-onprem-erp-파트)
+- [11. 13번 폴더: Advanced 파트](#11-13번-폴더-advanced-파트)
 
 ---
 
@@ -36,6 +35,8 @@
 | 09 | Nexus Repository 온프레미스 구축 | [09-Nexus-Repository-On-Prem](./09-Nexus-Repository-On-Prem/README.md) |
 | 10 | Drone CI 온프레미스 구축 | [10-Drone-CI-On-Prem](./10-Drone-CI-On-Prem/README.md) |
 | 11 | 통합 DevSecOps Lab | [11-Integrated-DevSecOps-Lab](./11-Integrated-DevSecOps-Lab/README.md) |
+| 12 | OnPrem ERP 통합 실습 | [12-Docker-OnPrem-ERP](./12-Docker-OnPrem-ERP/README.md) |
+| 13 | Docker Advanced Example 실습 | [13-Docker-Advanced-Example](./13-Docker-Advanced-Example/README.md) |
 
 ---
 
@@ -307,3 +308,23 @@ sudo ss -ltnp 'sport = :80'
    - 백업/복구 리허설 및 장애 대응 Runbook 작성
 4. **Phase 4 (보안 고도화)**
    - SSO, 비밀정보 중앙관리, 이미지 스캔/서명 정책 도입
+
+---
+
+## 10. 12번 폴더: OnPrem ERP 파트
+
+`https://github.com/edumgt/Docker-OnPrem-ERP.git`의 전체 내용을 아래 경로로 병합했습니다.
+
+- `12-Docker-OnPrem-ERP/`
+- 시작 문서: `12-Docker-OnPrem-ERP/README.md`
+- 주요 실행 파일: `12-Docker-OnPrem-ERP/start.sh`, `12-Docker-OnPrem-ERP/stop.sh`, `12-Docker-OnPrem-ERP/docker-compose.yml`
+
+---
+
+## 11. 13번 폴더: Advanced 파트
+
+`https://github.com/edumgt/Docker-Advanced-Example.git`의 전체 내용을 아래 경로로 병합했습니다.
+
+- `13-Docker-Advanced-Example/`
+- 시작 문서: `13-Docker-Advanced-Example/README.md`
+- 주요 파일: `13-Docker-Advanced-Example/docker-compose.yml`, `13-Docker-Advanced-Example/labs/`, `13-Docker-Advanced-Example/docs/`

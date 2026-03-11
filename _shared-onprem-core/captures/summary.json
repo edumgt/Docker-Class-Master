@@ -1,0 +1,35 @@
+{
+  "captured_at": "2026-03-01T03:16:18.861042+00:00",
+  "solutions": [
+    {
+      "solution": "odoo",
+      "runtime": "captures/odoo/01-runtime.png",
+      "login": "captures/odoo/02-login.png",
+      "dashboard": "captures/odoo/03-dashboard.png"
+    },
+    {
+      "solution": "erpnext",
+      "runtime": "captures/erpnext/01-runtime.png",
+      "login": "captures/erpnext/02-login.png",
+      "dashboard": "captures/erpnext/03-dashboard.png"
+    },
+    {
+      "solution": "zulip",
+      "runtime": "captures/zulip/01-runtime.png",
+      "login": "captures/zulip/02-login.png",
+      "dashboard": "captures/zulip/03-dashboard.png"
+    },
+    {
+      "solution": "taiga",
+      "runtime": "captures/taiga/01-runtime.png",
+      "login": "captures/taiga/02-login.png",
+      "dashboard": "captures/taiga/03-dashboard.png"
+    },
+    {
+      "solution": "tryton",
+      "runtime": "captures/tryton/01-runtime.png",
+      "login": "captures/tryton/02-login.png",
+      "dashboard": "captures/tryton/03-dashboard.png"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+services:
+  hello:
+    image: nginx:alpine
+    container_name: hello
+
+  web:
+    image: nginx:alpine
+    container_name: web
+    ports:
+      - "8080:80"

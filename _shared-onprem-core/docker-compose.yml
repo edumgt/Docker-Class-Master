@@ -1,0 +1,229 @@
+services:
+  odoo-rdbms:
+    image: postgres:16-alpine
+    container_name: odoo-rdbms
+    environment:
+      POSTGRES_DB: odoo
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - "9050:5432"
+    volumes:
+      - odoo_pg_data:/var/lib/postgresql/data
+      - ./docker/db-init/postgres-odoo.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d odoo"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  odoo-auth:
+    build:
+      context: ./docker/member-auth
+    container_name: odoo-auth
+    environment:
+      SOLUTION: odoo
+      PORT: "9000"
+      DEFAULT_PASSWORD: "123456"
+      JWT_SECRET: "123456"
+      DB_TYPE: postgres
+      DB_HOST: odoo-rdbms
+      DB_PORT: "5432"
+      DB_NAME: odoo
+      DB_USER: odoo
+      DB_PASSWORD: "123456"
+    ports:
+      - "9000:9000"
+    depends_on:
+      odoo-rdbms:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  erpnext-rdbms:
+    image: mariadb:11
+    container_name: erpnext-rdbms
+    environment:
+      MARIADB_DATABASE: erpnext
+      MARIADB_USER: erpnext
+      MARIADB_PASSWORD: "123456"
+      MARIADB_ROOT_PASSWORD: "123456"
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "9051:3306"
+    volumes:
+      - erpnext_mariadb_data:/var/lib/mysql
+      - ./docker/db-init/mariadb-erpnext.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -u root -p123456 --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  erpnext-auth:
+    build:
+      context: ./docker/member-auth
+    container_name: erpnext-auth
+    environment:
+      SOLUTION: erpnext
+      PORT: "9000"
+      DEFAULT_PASSWORD: "123456"
+      JWT_SECRET: "123456"
+      DB_TYPE: mariadb
+      DB_HOST: erpnext-rdbms
+      DB_PORT: "3306"
+      DB_NAME: erpnext
+      DB_USER: erpnext
+      DB_PASSWORD: "123456"
+    ports:
+      - "9001:9000"
+    depends_on:
+      erpnext-rdbms:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  zulip-rdbms:
+    image: postgres:16-alpine
+    container_name: zulip-rdbms
+    environment:
+      POSTGRES_DB: zulip
+      POSTGRES_USER: zulip
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - "9052:5432"
+    volumes:
+      - zulip_pg_data:/var/lib/postgresql/data
+      - ./docker/db-init/postgres-zulip.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zulip -d zulip"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  zulip-auth:
+    build:
+      context: ./docker/member-auth
+    container_name: zulip-auth
+    environment:
+      SOLUTION: zulip
+      PORT: "9000"
+      DEFAULT_PASSWORD: "123456"
+      JWT_SECRET: "123456"
+      DB_TYPE: postgres
+      DB_HOST: zulip-rdbms
+      DB_PORT: "5432"
+      DB_NAME: zulip
+      DB_USER: zulip
+      DB_PASSWORD: "123456"
+    ports:
+      - "9002:9000"
+    depends_on:
+      zulip-rdbms:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  taiga-rdbms:
+    image: postgres:16-alpine
+    container_name: taiga-rdbms
+    environment:
+      POSTGRES_DB: taiga
+      POSTGRES_USER: taiga
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - "9053:5432"
+    volumes:
+      - taiga_pg_data:/var/lib/postgresql/data
+      - ./docker/db-init/postgres-taiga.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taiga -d taiga"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  taiga-auth:
+    build:
+      context: ./docker/member-auth
+    container_name: taiga-auth
+    environment:
+      SOLUTION: taiga
+      PORT: "9000"
+      DEFAULT_PASSWORD: "123456"
+      JWT_SECRET: "123456"
+      DB_TYPE: postgres
+      DB_HOST: taiga-rdbms
+      DB_PORT: "5432"
+      DB_NAME: taiga
+      DB_USER: taiga
+      DB_PASSWORD: "123456"
+    ports:
+      - "9003:9000"
+    depends_on:
+      taiga-rdbms:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  tryton-rdbms:
+    image: postgres:16-alpine
+    container_name: tryton-rdbms
+    environment:
+      POSTGRES_DB: tryton
+      POSTGRES_USER: tryton
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - "9054:5432"
+    volumes:
+      - tryton_pg_data:/var/lib/postgresql/data
+      - ./docker/db-init/postgres-tryton.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tryton -d tryton"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  tryton-auth:
+    build:
+      context: ./docker/member-auth
+    container_name: tryton-auth
+    environment:
+      SOLUTION: tryton
+      PORT: "9000"
+      DEFAULT_PASSWORD: "123456"
+      JWT_SECRET: "123456"
+      DB_TYPE: postgres
+      DB_HOST: tryton-rdbms
+      DB_PORT: "5432"
+      DB_NAME: tryton
+      DB_USER: tryton
+      DB_PASSWORD: "123456"
+    ports:
+      - "9004:9000"
+    depends_on:
+      tryton-rdbms:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  odoo_pg_data:
+  erpnext_mariadb_data:
+  zulip_pg_data:
+  taiga_pg_data:
+  tryton_pg_data:

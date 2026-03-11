@@ -1,0 +1,178 @@
+name: Auto Set Repository Topics
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auto-topics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect tech stack topics
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          declare -a TOPICS=()
+
+          add_topic() {
+            local topic="$1"
+            for t in "${TOPICS[@]:-}"; do
+              if [[ "$t" == "$topic" ]]; then
+                return 0
+              fi
+            done
+            TOPICS+=("$topic")
+          }
+
+          exists() {
+            local pattern="$1"
+            compgen -G "$pattern" > /dev/null
+          }
+
+          exists_any() {
+            for p in "$@"; do
+              if compgen -G "$p" > /dev/null; then
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          contains_text() {
+            local file="$1"
+            local regex="$2"
+            if [[ -f "$file" ]] && grep -Eiq "$regex" "$file"; then
+              return 0
+            fi
+            return 1
+          }
+
+          echo "== Detect Node / React =="
+          if [[ -f package.json ]]; then
+            add_topic "nodejs"
+            add_topic "javascript"
+
+            if grep -Eiq '"react"|"react-dom"|"next"|"next.js"|"vite"|@vitejs' package.json; then
+              add_topic "react"
+              add_topic "frontend"
+            fi
+
+            if grep -Eiq '"typescript"' package.json || exists_any "tsconfig.json" "*.ts" "*.tsx"; then
+              add_topic "typescript"
+            fi
+          fi
+
+          if exists_any "*.jsx" "*.tsx" "src/*.jsx" "src/*.tsx"; then
+            add_topic "react"
+            add_topic "frontend"
+          fi
+
+          echo "== Detect Python =="
+          if [[ -f requirements.txt ]] || [[ -f pyproject.toml ]] || [[ -f Pipfile ]] || [[ -f setup.py ]] || exists_any "*.py" "src/*.py" "app/*.py"; then
+            add_topic "python"
+          fi
+
+          echo "== Detect Java / Spring =="
+          if [[ -f pom.xml ]] || [[ -f build.gradle ]] || [[ -f build.gradle.kts ]] || exists_any "*.java" "src/main/java/*.java"; then
+            add_topic "java"
+          fi
+
+          if contains_text "pom.xml" "spring-boot|org\.springframework" \
+             || contains_text "build.gradle" "spring-boot|org\.springframework" \
+             || contains_text "build.gradle.kts" "spring-boot|org\.springframework" \
+             || exists_any "src/main/resources/application.yml" "src/main/resources/application.yaml" "src/main/resources/application.properties"; then
+            add_topic "spring"
+            add_topic "spring-boot"
+          fi
+
+          echo "== Detect Docker =="
+          if exists_any "Dockerfile" "Dockerfile.*" "docker-compose.yml" "docker-compose.yaml" "compose.yml" "compose.yaml"; then
+            add_topic "docker"
+          fi
+
+          if exists_any "docker-compose.yml" "docker-compose.yaml" "compose.yml" "compose.yaml"; then
+            add_topic "docker-compose"
+          fi
+
+          echo "== Detect Kubernetes =="
+          if [[ -d k8s ]] || [[ -d kubernetes ]] || [[ -d helm ]]; then
+            add_topic "kubernetes"
+          fi
+
+          if grep -RIlEq 'apiVersion:|kind:' . \
+               --exclude-dir=.git \
+               --exclude-dir=node_modules \
+               --exclude-dir=.terraform \
+               --include="*.yml" \
+               --include="*.yaml" 2>/dev/null; then
+            if grep -RIlEq 'kind:\s*(Deployment|Service|Ingress|ConfigMap|Secret|StatefulSet|DaemonSet|Job|CronJob|Namespace|PersistentVolumeClaim)' . \
+                 --exclude-dir=.git \
+                 --exclude-dir=node_modules \
+                 --exclude-dir=.terraform \
+                 --include="*.yml" \
+                 --include="*.yaml" 2>/dev/null; then
+              add_topic "kubernetes"
+            fi
+          fi
+
+          if [[ -d helm ]] || exists_any "Chart.yaml" "charts/*/Chart.yaml"; then
+            add_topic "helm"
+            add_topic "kubernetes"
+          fi
+
+          echo "== Detect Terraform =="
+          if exists_any "*.tf" "*.tfvars" ".terraform.lock.hcl"; then
+            add_topic "terraform"
+            add_topic "infrastructure-as-code"
+          fi
+
+          echo "== Add optional generic tags =="
+          if [[ -d .github/workflows ]]; then
+            add_topic "github-actions"
+            add_topic "ci-cd"
+          fi
+
+          echo "== Final topics =="
+          printf '%s\n' "${TOPICS[@]}" | sort -u > topics.txt
+          cat topics.txt
+
+          jq -R . < topics.txt | jq -cs '{names: .}' > topics.json
+          echo "payload=$(cat topics.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Update repository topics
+        env:
+          GH_TOKEN: ${{ secrets.REPO_ADMIN_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          PAYLOAD: ${{ steps.detect.outputs.payload }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "REPO_ADMIN_TOKEN secret is required."
+            exit 1
+          fi
+
+          echo "Updating topics for ${OWNER}/${REPO}"
+          curl -fsSL \
+            -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${OWNER}/${REPO}/topics" \
+            -d "${PAYLOAD}"
+
+          echo "Topics updated successfully."

@@ -1,0 +1,13 @@
+services:
+  debug-target:
+    image: nginx:alpine
+    container_name: debug-target
+    ports:
+      - "8081:80"
+
+  observer:
+    image: alpine
+    container_name: observer
+    command: ["sh", "-c", "sleep infinity"]
+    depends_on:
+      - debug-target
