@@ -1,8 +1,6 @@
-# 🐳 Docker Class Master
+# 🐳 Docker Class Master — 실습 랩 가이드 (한국어)
 
-> **Select your language / 언어 선택 / 言語選択 / 选择语言**
->
-> 🇺🇸 [English](./README.en.md) · 🇰🇷 [한국어](./README.ko.md) · 🇯🇵 [日本語](./README.ja.md) · 🇨🇳 [中文](./README.zh.md)
+> 🇺🇸 [English](./README.en.md) · 🇰🇷 한국어 · 🇯🇵 [日本語](./README.ja.md) · 🇨🇳 [中文](./README.zh.md)
 
 ---
 
@@ -18,6 +16,19 @@
 - [9. 대상 독자와 도입 로드맵](#9-대상-독자와-도입-로드맵)
 - [10. 확장 커리큘럼 맵 (12~25)](#10-확장-커리큘럼-맵-1225)
 - [11. 공용 리소스 폴더](#11-공용-리소스-폴더)
+
+---
+
+## 🔬 랩 소개
+
+이 저장소는 Docker의 기초부터 온프레미스 DevSecOps 플랫폼 구축까지를 **핸즈온 실습(Hands-On Lab)** 형태로 학습할 수 있도록 설계되어 있습니다.
+
+| 항목 | 내용 |
+|---|---|
+| 실습 환경 | Docker Desktop (Windows/Mac) 또는 Linux Docker Engine |
+| 사전 요구사항 | Docker 설치 완료, 인터넷 연결, 최소 8 GB RAM |
+| 실습 방식 | 단계별 폴더 진행, CLI 명령 직접 실행, 결과 검증 |
+| 최종 목표 | 완전한 온프레미스 CI/CD + 보안 + 관측성 파이프라인 구축 |
 
 ---
 
@@ -110,9 +121,9 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 - `Zone 5 (Ops)`: 모니터링, 로깅, 백업, 보안
 
 권장 정책:
-- CI Zone -> Artifact Zone: Push 허용
-- Runtime Zone -> Artifact Zone: Pull 허용
-- Dev Zone -> Runtime Zone: 직접 접근 제한
+- CI Zone → Artifact Zone: Push 허용
+- Runtime Zone → Artifact Zone: Pull 허용
+- Dev Zone → Runtime Zone: 직접 접근 제한
 
 ---
 
@@ -364,3 +375,35 @@ sudo ss -ltnp 'sport = :80'
 - `_shared-onprem-core/`
   - 통합 오케스트레이션(`docker-compose.yml`, `start.sh`, `stop.sh`, `sync-solutions.sh`)
   - `solutions/*`는 상위 커리큘럼 폴더(21~25)로 연결되는 링크
+
+---
+
+## 🔬 랩 운영 팁
+
+### 실습 전 체크리스트
+```bash
+# Docker 정상 동작 확인
+docker version
+docker info
+
+# 디스크 여유 공간 확인 (최소 20 GB 권장)
+df -h
+
+# 포트 충돌 사전 점검
+sudo ss -ltnp | grep -E '80|443|8080|8443|9000|9090|3000'
+```
+
+### 실습 후 정리
+```bash
+# 중지된 컨테이너 일괄 제거
+docker container prune -f
+
+# 미사용 이미지 정리
+docker image prune -f
+
+# 전체 미사용 리소스 정리 (볼륨 제외)
+docker system prune -f
+```
+
+> [!TIP]
+> 각 단계 폴더 내 `README.md`에는 해당 실습의 목표, 명령어, 검증 방법이 상세히 기술되어 있습니다.
