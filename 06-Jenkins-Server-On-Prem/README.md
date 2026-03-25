@@ -56,7 +56,7 @@ docker run -d --name jenkins-server \
   --add-host=host.docker.internal:host-gateway \
   -v jenkins_home:/var/jenkins_home \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  onprem-jenkins:1.0
+  jenkins:latest
 ```
 
 ## 초기 접속
