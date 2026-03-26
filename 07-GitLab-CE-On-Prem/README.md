@@ -56,6 +56,10 @@ docker exec -it gitlab-ce grep 'Password:' /etc/gitlab/initial_root_password
 
 ---
 
+![alt text](image.png)
+
+Jh9898aa!!
+
 ## 수업 보강 가이드
 <!-- course-boost-onprem-v1 -->
 
