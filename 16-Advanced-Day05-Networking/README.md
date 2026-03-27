@@ -25,6 +25,9 @@
 - 프런트엔드 대시보드: `http://localhost:8000/`
 - Swagger UI: `http://localhost:8000/docs`
 - OpenAPI JSON: `http://localhost:8000/openapi.json`
+- 환경별 `.env` 샘플: `.env.local.sample`, `.env.dev.sample`, `.env.stag.sample`, `.env.prod.sample`
+- 예시: `cp .env.local.sample .env` 후 `docker compose up --build -d`
+- 다른 환경 예시: `cp .env.dev.sample .env` 또는 `cp .env.prod.sample .env`
 - 주문 생성:
 
 ```bash
