@@ -1,0 +1,16 @@
+{
+  "name": "13-advanced-day02-container-deepdive",
+  "version": "1.0.0",
+  "description": "- PID 1과 시그널 처리 개념을 이해한다. - 리소스 제한과 OOM 상황을 재현/진단한다. - bind mount/volume 차이를 실습한다.",
+  "main": "playwright-screenshot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "playwright": "^1.52.0"
+  }
+}
