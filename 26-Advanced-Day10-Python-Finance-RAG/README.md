@@ -71,3 +71,9 @@ python src/run_lab.py
 - [ ] 최소 5개 질의를 실행하고 근거 문서를 검토했다
 - [ ] 오답 1개를 분석하고 chunk/k/질의문 개선안을 기록했다
 - [ ] 팀 기준 평가표(정확성/근거성/재현성)를 작성했다
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Python+금융공학+RAG+LLM+실습)

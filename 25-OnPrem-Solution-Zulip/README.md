@@ -41,3 +41,9 @@ docker ps --filter name=zulip-rdbms
 - 메시징 서비스 특성에 맞는 모니터링 지표 5개 제안
 - 의존 서비스 장애(DB/큐/캐시) 시나리오별 대응 절차 작성
 - 팀 표준 incident report 템플릿으로 실습 결과 정리
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Zulip+메신저+Docker+설치)

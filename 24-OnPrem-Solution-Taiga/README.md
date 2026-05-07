@@ -41,3 +41,9 @@ docker ps --filter name=taiga-rdbms
 - Taiga 서비스 장애 대응 runbook(탐지/조치/검증) 작성
 - 포트 충돌 상황을 재현하고 해결 절차 문서화
 - Taiga/ERPNext의 운영 난이도 차이 분석
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Taiga+프로젝트+관리+Docker)

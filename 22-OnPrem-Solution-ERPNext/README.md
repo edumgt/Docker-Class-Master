@@ -41,3 +41,9 @@ docker ps --filter name=erpnext-rdbms
 - MariaDB 백업/복구 명령을 1회 실행 후 기록
 - 로그인 실패 케이스(비밀번호 오입력) 응답 코드 정리
 - ERPNext와 Odoo의 DB 운영 차이를 비교 문서로 작성
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=ERPNext+Docker+설치)

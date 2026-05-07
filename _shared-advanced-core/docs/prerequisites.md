@@ -30,3 +30,9 @@
 - 리눅스 기본 명령어(ls, cd, cat, grep, ps, netstat/ss)
 - 포트/프로세스 개념(0.0.0.0, localhost)
 - Git 기본(add/commit/push/branch)
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+사전+준비+설치)

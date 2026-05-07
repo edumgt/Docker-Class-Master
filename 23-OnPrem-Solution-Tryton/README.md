@@ -41,3 +41,9 @@ docker ps --filter name=tryton-rdbms
 - Tryton 사용자 1건 추가/조회 시나리오 작성
 - 로그 기반 장애 원인 분석 리포트 1건 작성
 - 공통 인증 API 구조를 다른 솔루션에 재사용 가능한지 설계 의견 작성
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Tryton+ERP+Docker)

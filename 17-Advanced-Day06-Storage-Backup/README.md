@@ -53,3 +53,9 @@
 1. 같은 실습을 "수동 명령"과 "compose 자동화" 두 방식으로 재작성
 2. `Makefile` 또는 셸 스크립트로 start/stop/log/clean 명령 래핑
 3. 팀 기준 runbook(장애 조치 절차) 1페이지 작성
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+볼륨+스토리지+백업+복구)

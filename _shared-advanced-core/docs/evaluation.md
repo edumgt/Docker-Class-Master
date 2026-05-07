@@ -18,3 +18,9 @@
 - [ ] 이미지 크기/레이어 최적화가 반영되어 있는가?
 - [ ] CI에서 빌드/테스트/푸시가 자동화되어 있는가?
 - [ ] 장애 2개 이상 재현/대응 Runbook이 있는가?
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+과정+평가+기준)

@@ -11,3 +11,9 @@ ES는 극단 손실을 더 잘 반영하므로 스트레스 국면 리스크 관
 ## Duration and Convexity
 채권 포트폴리오의 듀레이션은 금리 변동에 대한 1차 민감도를 나타낸다.
 컨벡시티는 2차 효과를 반영해 큰 금리 변동에서 가격 추정 오차를 줄여준다.
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=포트폴리오+리스크+관리+VaR)
