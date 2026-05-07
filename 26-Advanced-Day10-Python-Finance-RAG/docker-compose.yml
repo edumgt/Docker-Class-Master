@@ -1,0 +1,7 @@
+services:
+  finance-rag-lab:
+    build:
+      context: ./app
+    container_name: finance-rag-lab
+    stdin_open: true
+    tty: true
