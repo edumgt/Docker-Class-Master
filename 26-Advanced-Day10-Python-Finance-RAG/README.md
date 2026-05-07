@@ -33,8 +33,11 @@
 │  │  ├─ portfolio_risk.md
 │  │  ├─ market_microstructure.md
 │  │  └─ regulation_basics.md
+│  ├─ static/
+│  │  └─ index.html          ← Vanilla JS + Tailwind CSS 프론트엔드
 │  └─ src/
-│     ├─ run_lab.py
+│     ├─ api.py               ← FastAPI 백엔드
+│     ├─ run_lab.py           ← CLI 실습 진입점 (레거시)
 │     └─ finance_rag/
 │        ├─ __init__.py
 │        ├─ ingest.py
@@ -45,11 +48,12 @@
 
 ## 실행 방법
 
-### 1) Docker Compose로 실행
+### 1) Docker Compose로 실행 (권장)
 ```bash
 cd 26-Advanced-Day10-Python-Finance-RAG
 docker compose up --build
 ```
+서버가 기동되면 브라우저에서 **http://localhost:8000** 을 열어 웹 UI를 사용합니다.
 
 ### 2) 로컬 Python 실행
 ```bash
@@ -57,8 +61,19 @@ cd 26-Advanced-Day10-Python-Finance-RAG/app
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python src/run_lab.py
+uvicorn api:app --host 0.0.0.0 --port 8000 --app-dir src
 ```
+브라우저에서 **http://localhost:8000** 접속.
+
+### API 엔드포인트
+| 메서드 | 경로 | 설명 |
+|---|---|---|
+| `GET` | `/` | 웹 UI (프론트엔드 SPA) |
+| `GET` | `/health` | 헬스체크 |
+| `POST` | `/ask` | JSON 바디로 질문 (`question`, `top_k`) |
+| `GET` | `/ask?q=질문` | 쿼리 파라미터로 질문 |
+| `GET` | `/docs` | Swagger UI (자동 생성) |
+| `GET` | `/redoc` | ReDoc API 문서 |
 
 ## 예시 질의
 - `듀레이션과 금리 민감도 관계를 설명해줘`
