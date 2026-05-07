@@ -299,6 +299,7 @@ sudo ss -ltnp 'sport = :80'
 | SonarQube Community | `sonarqube:community` |
 | Nexus Repository OSS | `sonatype/nexus3:3.70.1` |
 | Drone CI | `drone/drone:2` |
+| Ollama | `ollama/ollama:latest` |
 
 ---
 

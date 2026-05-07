@@ -28,6 +28,35 @@ docker image ls
 ![alt text](image.png)
 ![alt text](image-1.png)
 
+## 보강: Ollama 로컬 LLM 컨테이너 실행 예시
+
+### 1) Ollama 이미지 Pull
+```bash
+docker pull ollama/ollama:latest
+```
+
+### 2) Ollama 서버 실행 (모델 저장 볼륨 포함)
+```bash
+docker run -d --name ollama -p 11434:11434 -v ollama-data:/root/.ollama ollama/ollama:latest
+```
+
+### 3) 모델 다운로드
+```bash
+docker exec -it ollama ollama pull llama3.2:1b
+```
+
+### 4) 추론 API 호출
+```bash
+curl -s http://localhost:11434/api/generate \
+  -d '{"model":"llama3.2:1b","prompt":"hello","stream":false}'
+```
+
+### 5) 정리
+```bash
+docker stop ollama
+docker rm ollama
+```
+
 ## 참고: Apple Silicon(Mac) 환경
 1. Apple Silicon용 Docker Desktop을 설치합니다.
    - https://docs.docker.com/desktop/mac/install/
