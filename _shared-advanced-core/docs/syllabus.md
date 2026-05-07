@@ -126,3 +126,9 @@
 - 발표/리뷰 + 최종 체크리스트
 
 ➡️ 캡스톤: `capstone/README.md`
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+커리큘럼+학습+계획)

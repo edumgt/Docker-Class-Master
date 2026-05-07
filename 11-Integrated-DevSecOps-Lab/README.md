@@ -110,3 +110,9 @@ Traefik 라우팅 테스트를 위해 `/etc/hosts`에 아래를 추가하세요.
 
 ### 다음 단계
 - `11-Integrated-DevSecOps-Lab`로 확장하여 인증/시크릿/관측성을 포함한 운영형 실습으로 연결
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=DevSecOps+Docker+통합+실습)

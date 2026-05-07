@@ -58,3 +58,9 @@
 - 명령 실행 자체보다 "왜 이 명령을 썼는지" 설명 가능한지
 - 동일 결과를 다른 방법(run/compose)으로 재현 가능한지
 - 정리 문서에 복구 절차가 포함되어 있는지
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+설치+가이드)

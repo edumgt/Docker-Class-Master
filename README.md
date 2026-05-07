@@ -417,3 +417,9 @@ python src/run_lab.py
 
 > [!TIP]
 > Lab 상세 안내는 `26-Advanced-Day10-Python-Finance-RAG/README.md`를 참고하세요.
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+DevSecOps+강의)

@@ -407,3 +407,9 @@ docker system prune -f
 
 > [!TIP]
 > Each lab folder's `README.md` contains detailed objectives, commands, and verification steps for that lab.
+
+---
+
+## 📺 Related YouTube Videos
+
+[🎬 Search for related videos on YouTube](https://www.youtube.com/results?search_query=Docker+DevSecOps+tutorial)

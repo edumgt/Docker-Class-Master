@@ -11,3 +11,9 @@
 ## Auditability
 의사결정 근거와 데이터 출처를 추적 가능하게 남겨야 규제 대응이 가능하다.
 RAG 시스템에서도 답변 근거 문서와 검색 스코어를 함께 기록하는 것이 중요하다.
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=금융+규제+기초+컴플라이언스)

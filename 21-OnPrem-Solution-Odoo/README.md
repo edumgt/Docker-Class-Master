@@ -41,3 +41,9 @@ docker ps --filter name=odoo-rdbms
 - 비밀번호 정책 변경 시 영향 범위를 문서화
 - Odoo 계정 1개 추가 생성 후 로그인 검증
 - 장애 시나리오(DB down) 재현 후 복구 절차 정리
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Odoo+Docker+온프레미스+설치)

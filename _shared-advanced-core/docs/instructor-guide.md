@@ -15,3 +15,9 @@
 - Windows/WSL 경로/권한 이슈 → WSL 내부 폴더에서 실습 유도
 - 포트 충돌(80/443/8080) → `lsof/ss/netstat`로 점검 습관
 - 이미지 아키텍처 불일치(arm64/amd64) → `--platform` 설명
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+강사+수업+가이드)

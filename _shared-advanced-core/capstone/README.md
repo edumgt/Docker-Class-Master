@@ -26,3 +26,9 @@
 - 이미지 최적화/보안 기본: 20
 - CI 파이프라인 완성도: 20
 - 문서화/Runbook 품질: 10
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Docker+캡스톤+프로젝트+실습)

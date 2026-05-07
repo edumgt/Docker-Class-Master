@@ -220,3 +220,9 @@ docker run -d --name drone-server \
 
 ### 다음 단계
 - `11-Integrated-DevSecOps-Lab`로 확장하여 인증/시크릿/관측성을 포함한 운영형 실습으로 연결
+
+---
+
+## 📺 관련 YouTube 영상
+
+[🎬 YouTube에서 관련 영상 검색하기](https://www.youtube.com/results?search_query=Drone+CI+Docker+설치)
