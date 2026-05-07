@@ -16,8 +16,9 @@
 - [7. WSL 포트 80 트러블슈팅](#7-wsl-포트-80-트러블슈팅)
 - [8. Docker 이미지 목록](#8-docker-이미지-목록)
 - [9. 대상 독자와 도입 로드맵](#9-대상-독자와-도입-로드맵)
-- [10. 확장 커리큘럼 맵 (12~25)](#10-확장-커리큘럼-맵-1225)
+- [10. 확장 커리큘럼 맵 (12~26)](#10-확장-커리큘럼-맵-1226)
 - [11. 공용 리소스 폴더](#11-공용-리소스-폴더)
+- [12. Python + 금융공학 RAG Lab](#12-python--금융공학-rag-lab)
 
 ---
 
@@ -50,6 +51,7 @@
 | 23 | OnPrem Solution: Tryton | [23-OnPrem-Solution-Tryton](./23-OnPrem-Solution-Tryton/README.md) |
 | 24 | OnPrem Solution: Taiga | [24-OnPrem-Solution-Taiga](./24-OnPrem-Solution-Taiga/README.md) |
 | 25 | OnPrem Solution: Zulip | [25-OnPrem-Solution-Zulip](./25-OnPrem-Solution-Zulip/README.md) |
+| 26 | Advanced Day10: Python + 금융공학 RAG | [26-Advanced-Day10-Python-Finance-RAG](./26-Advanced-Day10-Python-Finance-RAG/README.md) |
 
 ---
 
@@ -325,11 +327,12 @@ sudo ss -ltnp 'sport = :80'
 
 ---
 
-## 10. 확장 커리큘럼 맵 (12~25)
+## 10. 확장 커리큘럼 맵 (12~26)
 
 난이도 순 확장 실습 구조:
 - `12~20`: Advanced Day01~Day09
 - `21~25`: OnPrem 솔루션별 소스 학습(odoo, erpnext, tryton, taiga, zulip)
+- `26`: Python 기반 금융공학 RAG 실습
 
 ### Advanced 파트 (12~20)
 | 번호 | 폴더 | 핵심 주제 |
@@ -353,6 +356,11 @@ sudo ss -ltnp 'sport = :80'
 | 24 | `24-OnPrem-Solution-Taiga` | Taiga |
 | 25 | `25-OnPrem-Solution-Zulip` | Zulip |
 
+### Python + 금융공학 RAG 파트 (26)
+| 번호 | 폴더 | 핵심 주제 |
+|---|---|---|
+| 26 | `26-Advanced-Day10-Python-Finance-RAG` | 금융공학 도메인 RAG(수집/청킹/검색/근거답변) |
+
 ---
 
 ## 11. 공용 리소스 폴더
@@ -365,3 +373,47 @@ sudo ss -ltnp 'sport = :80'
 - `_shared-onprem-core/`
   - 통합 오케스트레이션(`docker-compose.yml`, `start.sh`, `stop.sh`, `sync-solutions.sh`)
   - `solutions/*`는 상위 커리큘럼 폴더(21~25)로 연결되는 링크
+
+---
+
+## 12. Python + 금융공학 RAG Lab
+
+추가된 `26-Advanced-Day10-Python-Finance-RAG` 폴더는 Python으로 RAG 핵심 구성요소를 직접 구현하는 금융공학 특화 실습입니다.
+
+### 학습 범위
+- 금융공학 문서 수집과 섹션/문단 기반 chunking
+- TF-IDF 유사 스코어 기반 Top-K 검색
+- 근거(citation) 포함 답변 생성
+- 질의셋 기반 정확도/근거성/재현성 평가
+
+### 커리큘럼 요약
+| 모듈 | 주제 | 산출물 |
+|---|---|---|
+| 1 | RAG 아키텍처 이해 | 구성도 |
+| 2 | 인덱싱 파이프라인 | 생성된 chunks |
+| 3 | 검색 품질 실습 | Top-K 검색 결과 |
+| 4 | 근거 기반 답변 | 답변 + citations |
+| 5 | 평가 및 개선 | 개선 리포트 |
+
+### 빠른 실행
+```bash
+# Docker
+cd 26-Advanced-Day10-Python-Finance-RAG
+docker compose up --build
+
+# Local Python
+cd 26-Advanced-Day10-Python-Finance-RAG/app
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/run_lab.py
+```
+
+### 실습 질의 예시
+- 듀레이션과 금리 민감도의 관계는?
+- VaR와 Expected Shortfall 비교
+- 유동성 리스크 대응 주문 전략
+- 모델 리스크 통제와 감사 추적성
+
+> [!TIP]
+> Lab 상세 안내는 `26-Advanced-Day10-Python-Finance-RAG/README.md`를 참고하세요.
