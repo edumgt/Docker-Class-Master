@@ -1,18 +1,6 @@
 # 🐳 Docker Class Master
 
----
-
-| ◀ 이전 강의 | 📚 커리큘럼 (4 / 10) | 다음 강의 ▶ |
-|:---|:---:|---:|
-| [← Python 크롤링 실습](https://github.com/edumgt/python-crawling-lab) | **Docker 실습** | [AWS EC2 / ALB 실습 →](https://github.com/edumgt/aws-ec2-alb-lab) |
-
----
-
-> **Select your language / 언어 선택 / 言語選択 / 选择语言**
->
-> 🇺🇸 [English](./README.en.md) · 🇰🇷 [한국어](./README.ko.md) · 🇯🇵 [日本語](./README.ja.md) · 🇨🇳 [中文](./README.zh.md)
-
----
+## 선수 repo - https://github.com/edumgt/edumgt-lab-init
 
 ## 목차
 - [1. 학습 로드맵](#1-학습-로드맵)
