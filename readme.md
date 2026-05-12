@@ -15,6 +15,7 @@
 - [10. 확장 커리큘럼 맵 (12~26)](#10-확장-커리큘럼-맵-1226)
 - [11. 공용 리소스 폴더](#11-공용-리소스-폴더)
 - [12. Python + 금융공학 RAG Lab](#12-python--금융공학-rag-lab)
+- [13. Vector DB 원리와 Docker 실습](#13-vector-db-원리와-docker-실습)
 
 ---
 
@@ -48,6 +49,7 @@
 | 24 | OnPrem Solution: Taiga | [24-OnPrem-Solution-Taiga](./24-OnPrem-Solution-Taiga/README.md) |
 | 25 | OnPrem Solution: Zulip | [25-OnPrem-Solution-Zulip](./25-OnPrem-Solution-Zulip/README.md) |
 | 26 | Advanced Day10: Python + 금융공학 RAG | [26-Advanced-Day10-Python-Finance-RAG](./26-Advanced-Day10-Python-Finance-RAG/README.md) |
+| 27 | Vector DB Docker Playground | [27-Vector-DB-Docker-Playground](./27-Vector-DB-Docker-Playground/README.md) |
 
 ---
 
@@ -323,12 +325,13 @@ sudo ss -ltnp 'sport = :80'
 
 ---
 
-## 10. 확장 커리큘럼 맵 (12~26)
+## 10. 확장 커리큘럼 맵 (12~27)
 
 난이도 순 확장 실습 구조:
 - `12~20`: Advanced Day01~Day09
 - `21~25`: OnPrem 솔루션별 소스 학습(odoo, erpnext, tryton, taiga, zulip)
 - `26`: Python 기반 금융공학 RAG 실습
+- `27`: 경량 오픈소스 Vector DB Docker 실습
 
 ### Advanced 파트 (12~20)
 | 번호 | 폴더 | 핵심 주제 |
@@ -356,6 +359,11 @@ sudo ss -ltnp 'sport = :80'
 | 번호 | 폴더 | 핵심 주제 |
 |---|---|---|
 | 26 | `26-Advanced-Day10-Python-Finance-RAG` | 금융공학 도메인 RAG(수집/청킹/검색/근거답변) |
+
+### Vector DB Docker 파트 (27)
+| 번호 | 폴더 | 핵심 주제 |
+|---|---|---|
+| 27 | `27-Vector-DB-Docker-Playground` | Qdrant/Chroma/Weaviate/pgvector 단일 실행 실습 |
 
 ---
 
@@ -413,6 +421,29 @@ python src/run_lab.py
 
 > [!TIP]
 > Lab 상세 안내는 `26-Advanced-Day10-Python-Finance-RAG/README.md`를 참고하세요.
+
+---
+
+## 13. Vector DB 원리와 Docker 실습
+
+### Vector DB 핵심 원리
+- **임베딩(Vectorization)**: 텍스트/이미지 등을 고정 길이 벡터로 변환해 의미 유사성을 수치화합니다.
+- **인덱싱(ANN)**: HNSW/IVF 같은 근사 최근접 탐색 인덱스로 대규모 벡터에서 빠르게 Top-K를 찾습니다.
+- **유사도 계산**: Cosine, Dot Product, Euclidean 거리로 질의 벡터와 저장 벡터의 유사도를 평가합니다.
+- **메타데이터 필터**: 태그/시간/권한 같은 조건을 함께 걸어 검색 범위를 줄입니다.
+- **RAG 연결**: 검색된 문서를 LLM 프롬프트 컨텍스트로 주입해 환각을 줄이고 근거 기반 답변을 만듭니다.
+
+### 왜 Docker로 실습하나?
+- 설치 복잡도를 줄이고, 서비스별 버전을 고정하여 재현 가능한 실습 환경을 만듭니다.
+- 로컬 노트북/서버 어디서든 동일 명령으로 기동/중지/정리할 수 있습니다.
+
+### 경량 오픈소스 Vector DB Docker 예제
+- Qdrant
+- Chroma
+- Weaviate
+- pgvector (PostgreSQL 확장)
+
+실습 경로: [`27-Vector-DB-Docker-Playground`](./27-Vector-DB-Docker-Playground/README.md)
 
 ---
 

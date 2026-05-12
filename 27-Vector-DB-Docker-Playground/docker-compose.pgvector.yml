@@ -1,0 +1,16 @@
+services:
+  pgvector:
+    image: pgvector/pgvector:pg16
+    container_name: pgvector
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvector-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgvector-data:
