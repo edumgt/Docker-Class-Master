@@ -16,6 +16,7 @@
 - [11. 공용 리소스 폴더](#11-공용-리소스-폴더)
 - [12. Python + 금융공학 RAG Lab](#12-python--금융공학-rag-lab)
 - [13. Vector DB 원리와 Docker 실습](#13-vector-db-원리와-docker-실습)
+- [14. 멀티 모델 & sLLM Docker 서빙](#14-멀티-모델--sllm-docker-서빙)
 
 ---
 
@@ -50,6 +51,7 @@
 | 25 | OnPrem Solution: Zulip | [25-OnPrem-Solution-Zulip](./25-OnPrem-Solution-Zulip/README.md) |
 | 26 | Advanced Day10: Python + 금융공학 RAG | [26-Advanced-Day10-Python-Finance-RAG](./26-Advanced-Day10-Python-Finance-RAG/README.md) |
 | 27 | Vector DB Docker Playground | [27-Vector-DB-Docker-Playground](./27-Vector-DB-Docker-Playground/README.md) |
+| 28 | 멀티 모델 & sLLM Docker 서빙 | [28-Multi-Model-sLLM-Serving](./28-Multi-Model-sLLM-Serving/README.md) |
 
 ---
 
@@ -300,6 +302,7 @@ sudo ss -ltnp 'sport = :80'
 | Nexus Repository OSS | `sonatype/nexus3:3.70.1` |
 | Drone CI | `drone/drone:2` |
 | Ollama | `ollama/ollama:latest` |
+| Open WebUI | `ghcr.io/open-webui/open-webui:main` |
 
 ---
 
@@ -332,6 +335,7 @@ sudo ss -ltnp 'sport = :80'
 - `21~25`: OnPrem 솔루션별 소스 학습(odoo, erpnext, tryton, taiga, zulip)
 - `26`: Python 기반 금융공학 RAG 실습
 - `27`: 경량 오픈소스 Vector DB Docker 실습
+- `28`: 멀티 모델 & sLLM Docker 서빙 (Gemma3, Llama 3, DeepSeek-R1)
 
 ### Advanced 파트 (12~20)
 | 번호 | 폴더 | 핵심 주제 |
@@ -364,6 +368,11 @@ sudo ss -ltnp 'sport = :80'
 | 번호 | 폴더 | 핵심 주제 |
 |---|---|---|
 | 27 | `27-Vector-DB-Docker-Playground` | Qdrant/Chroma/Weaviate/pgvector 단일 실행 실습 |
+
+### 멀티 모델 & sLLM 서빙 파트 (28)
+| 번호 | 폴더 | 핵심 주제 |
+|---|---|---|
+| 28 | `28-Multi-Model-sLLM-Serving` | Ollama로 Gemma3/Llama3/DeepSeek-R1 CPU·GPU 서빙 |
 
 ---
 
@@ -444,6 +453,50 @@ python src/run_lab.py
 - pgvector (PostgreSQL 확장)
 
 실습 경로: [`27-Vector-DB-Docker-Playground`](./27-Vector-DB-Docker-Playground/README.md)
+
+---
+
+## 14. 멀티 모델 & sLLM Docker 서빙
+
+### 개요
+Ollama Docker 이미지 하나로 Gemma3, Llama 3, DeepSeek-R1 등 최신 오픈소스 sLLM을 CPU/GPU 환경에서 바로 서빙할 수 있습니다. Open WebUI를 함께 기동하면 브라우저에서 멀티 모델 채팅 환경을 구성할 수 있습니다.
+
+### 핵심 구성 요소
+- **Ollama**: 모델 Pull/서빙/REST API 제공 (`/api/generate`, `/api/chat`)
+- **Open WebUI**: 브라우저 기반 멀티 모델 채팅 UI (Ollama와 자동 연동)
+
+### 지원 모델 (도메인별 추천)
+
+| 도메인 | 추천 모델 | 특징 |
+|---|---|---|
+| 범용/교육 | `gemma3:2b`, `gemma3:12b` | Google, 경량~중형 |
+| 범용/대화 | `llama3:8b`, `llama3:70b` | Meta, 생태계 최대 |
+| 추론/코딩 | `deepseek-r1:7b`, `deepseek-r1:14b` | 추론 특화 |
+| 다국어(한국어) | `qwen2.5:7b` | 한국어 강점 |
+| 경량/엣지 | `phi4` | Microsoft, 14B |
+
+### 빠른 시작
+
+```bash
+cd 28-Multi-Model-sLLM-Serving
+
+# CPU 전용 (로컬 개발 환경)
+docker compose -f docker-compose.ollama.yml up -d
+
+# 모델 Pull
+docker exec -it ollama ollama pull gemma3:2b
+
+# REST API 테스트
+curl -s http://localhost:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gemma3:2b","prompt":"Docker란 무엇인가?","stream":false}' \
+  | python3 -m json.tool
+
+# Open WebUI 포함 풀 스택 (UI: http://localhost:3000)
+docker compose -f docker-compose.stack.yml up -d
+```
+
+실습 경로: [`28-Multi-Model-sLLM-Serving`](./28-Multi-Model-sLLM-Serving/README.md)
 
 ---
 
