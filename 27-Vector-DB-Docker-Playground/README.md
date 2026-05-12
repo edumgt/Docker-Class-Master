@@ -50,6 +50,9 @@ curl -s http://localhost:8080/v1/.well-known/ready
 
 ### D. pgvector (PostgreSQL)
 ```bash
+# 비밀번호를 환경변수로 지정(권장)
+export POSTGRES_PASSWORD='replace-with-strong-password'
+
 docker compose -f docker-compose.pgvector.yml up -d
 
 # 확장 확인
