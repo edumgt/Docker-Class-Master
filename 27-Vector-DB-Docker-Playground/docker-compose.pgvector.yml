@@ -4,7 +4,7 @@ services:
     container_name: pgvector
     environment:
       POSTGRES_USER: vector_admin
-      POSTGRES_PASSWORD: change_me_please
+      POSTGRES_PASSWORD: CHANGE_THIS_PASSWORD_BEFORE_USE
       POSTGRES_DB: vectordb
     ports:
       - "5432:5432"
