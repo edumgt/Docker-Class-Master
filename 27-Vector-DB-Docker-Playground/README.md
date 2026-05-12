@@ -53,7 +53,7 @@ curl -s http://localhost:8080/v1/.well-known/ready
 docker compose -f docker-compose.pgvector.yml up -d
 
 # 확장 확인
-docker exec -it pgvector psql -U app -d app -c "CREATE EXTENSION IF NOT EXISTS vector;"
+docker exec -it pgvector psql -U vector_admin -d vectordb -c "CREATE EXTENSION IF NOT EXISTS vector;"
 ```
 
 ---
