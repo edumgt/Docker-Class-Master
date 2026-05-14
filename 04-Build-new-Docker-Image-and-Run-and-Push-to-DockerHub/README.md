@@ -311,7 +311,7 @@ docker push 086015456585.dkr.ecr.ap-northeast-2.amazonaws.com/edumgt/nginx
 Harbor는 오픈소스 프라이빗 컨테이너 레지스트리로, 온프레미스 환경에서 이미지를 관리하고 취약점 스캔·접근 정책을 적용할 수 있습니다.
 
 ### 전제 조건
-- Harbor 서버가 실행 중 (예: `11-Integrated-DevSecOps-Lab`의 `harbor` 프로파일 또는 별도 설치)
+- Harbor 서버가 실행 중 (예: `11-Integrated-DevSecOps-Lab`의 `harbor` 프로필 또는 별도 설치)
 - Harbor URL 및 프로젝트 이름 확인 (예: `harbor.example.com` / 프로젝트: `myproject`)
 - Harbor 계정(admin 또는 프로젝트 Developer 이상)
 
@@ -487,7 +487,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/mynginx_image1:latest
           labels: |
-            org.opencontainers.image.source=${{ github.repositoryUrl }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
 ```
 
 > [!NOTE]
