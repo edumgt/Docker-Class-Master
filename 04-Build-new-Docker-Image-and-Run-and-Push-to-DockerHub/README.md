@@ -306,6 +306,206 @@ docker push 086015456585.dkr.ecr.ap-northeast-2.amazonaws.com/edumgt/nginx
 
 ---
 
+## Harbor에 Push
+
+Harbor는 오픈소스 프라이빗 컨테이너 레지스트리로, 온프레미스 환경에서 이미지를 관리하고 취약점 스캔·접근 정책을 적용할 수 있습니다.
+
+### 전제 조건
+- Harbor 서버가 실행 중 (예: `11-Integrated-DevSecOps-Lab`의 `harbor` 프로파일 또는 별도 설치)
+- Harbor URL 및 프로젝트 이름 확인 (예: `harbor.example.com` / 프로젝트: `myproject`)
+- Harbor 계정(admin 또는 프로젝트 Developer 이상)
+
+### 1) Harbor 로그인
+```bash
+docker login harbor.example.com
+# Username: admin (또는 본인 계정)
+# Password: 설정한 비밀번호 입력
+```
+
+```text
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Login Succeeded
+```
+
+> [!TIP]
+> HTTPS 인증서가 자체 서명(self-signed)인 경우 `/etc/docker/daemon.json`에 `insecure-registries` 를 추가하거나, 사설 CA 인증서를 시스템에 등록하세요.
+>
+> ```json
+> {
+>   "insecure-registries": ["harbor.example.com"]
+> }
+> ```
+> 변경 후 Docker 재시작: `sudo systemctl restart docker`
+
+### 2) 이미지 태깅
+```bash
+# 형식: <harbor-host>/<project>/<image-name>:<tag>
+docker tag <your-docker-hub-id>/mynginx_image1:v1 harbor.example.com/myproject/mynginx_image1:v1
+```
+
+### 3) Harbor로 Push
+```bash
+docker push harbor.example.com/myproject/mynginx_image1:v1
+```
+
+```text
+The push refers to repository [harbor.example.com/myproject/mynginx_image1]
+v1: digest: sha256:... size: 1234
+```
+
+### 4) Harbor UI에서 확인
+1. 브라우저에서 `https://harbor.example.com` 접속
+2. 로그인 후 **Projects** → `myproject` 선택
+3. **Repositories** 탭에서 업로드된 이미지와 태그를 확인합니다.
+4. **Vulnerabilities** 탭에서 자동 스캔 결과도 확인할 수 있습니다.
+
+### 5) Harbor에서 Pull
+```bash
+docker pull harbor.example.com/myproject/mynginx_image1:v1
+```
+
+---
+
+## GitHub Packages(ghcr.io)에 Push
+
+GitHub Container Registry(GHCR)를 이용하면 GitHub 저장소와 연동된 패키지(컨테이너 이미지)를 관리하고, 저장소 **Packages** 탭에서 목록을 확인할 수 있습니다.
+
+### 전제 조건
+- GitHub 계정 및 저장소 준비
+- GitHub Personal Access Token (PAT) 발급
+  - `Settings` → `Developer settings` → `Personal access tokens` → `Tokens (classic)`
+  - 권한 선택: `write:packages`, `read:packages`, `delete:packages`, `repo`
+
+### 1) PAT 환경 변수 설정 및 로그인
+
+```bash
+# PAT를 환경 변수에 저장 (터미널 세션 종료 시 사라짐)
+export CR_PAT=<your_github_pat>
+
+# ghcr.io 로그인
+echo $CR_PAT | docker login ghcr.io -u <your-github-username> --password-stdin
+```
+
+```text
+Login Succeeded
+```
+
+### 2) 이미지 태깅
+```bash
+# 형식: ghcr.io/<github-username-or-org>/<image-name>:<tag>
+docker tag <your-docker-hub-id>/mynginx_image1:v1 ghcr.io/<your-github-username>/mynginx_image1:v1
+```
+
+예시:
+```bash
+docker tag stacksimplify/mynginx_image1:v1 ghcr.io/stacksimplify/mynginx_image1:v1
+```
+
+### 3) ghcr.io로 Push
+```bash
+docker push ghcr.io/<your-github-username>/mynginx_image1:v1
+```
+
+```text
+The push refers to repository [ghcr.io/your-github-username/mynginx_image1]
+v1: digest: sha256:... size: 1234
+```
+
+### 4) GitHub Packages 목록 확인
+
+#### 방법 A: GitHub 웹 UI
+1. `https://github.com/<your-github-username>` 접속
+2. 프로필 페이지의 **Packages** 탭 클릭
+   - 또는 특정 저장소 → **Packages** 섹션(우측 사이드바) 확인
+3. Push한 이미지(`mynginx_image1`)가 목록에 표시됩니다.
+4. 패키지 클릭 시 태그 목록, 다운로드 수, 메타데이터를 확인할 수 있습니다.
+
+#### 방법 B: GitHub CLI (`gh`)
+```bash
+# 로그인
+gh auth login
+
+# 패키지 목록 확인 (사용자)
+gh api user/packages?package_type=container --jq '.[].name'
+
+# 패키지 목록 확인 (조직)
+gh api orgs/<org-name>/packages?package_type=container --jq '.[].name'
+```
+
+#### 방법 C: Docker CLI로 확인
+```bash
+# 이미지 목록에서 ghcr.io 이미지 확인
+docker images | grep ghcr.io
+```
+
+### 5) 패키지 공개/비공개 설정
+기본적으로 Push된 패키지는 **private**입니다. 공개하려면:
+1. `https://github.com/users/<your-github-username>/packages/container/<image-name>/settings` 접속
+2. **Danger Zone** → **Change visibility** → `Public` 선택
+
+### 6) 저장소와 패키지 연결
+```bash
+# 이미지에 저장소 라벨을 추가하면 GitHub이 자동으로 연결합니다.
+docker build \
+  --label "org.opencontainers.image.source=https://github.com/<your-github-username>/<repo-name>" \
+  -t ghcr.io/<your-github-username>/mynginx_image1:v1 .
+
+docker push ghcr.io/<your-github-username>/mynginx_image1:v1
+```
+
+> [!TIP]
+> `org.opencontainers.image.source` 라벨을 추가하면 GitHub Packages 상세 페이지에서 연결된 저장소 링크가 표시됩니다.
+
+### 7) GitHub Actions에서 자동 Push (CI/CD 예시)
+```yaml
+name: Build and Push to GHCR
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./04-Build-new-Docker-Image-and-Run-and-Push-to-DockerHub/Nginx-DockerFiles
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/mynginx_image1:latest
+          labels: |
+            org.opencontainers.image.source=${{ github.repositoryUrl }}
+```
+
+> [!NOTE]
+> GitHub Actions에서는 별도 PAT 없이 `secrets.GITHUB_TOKEN`으로 ghcr.io에 Push할 수 있습니다.
+
+---
+
+## 레지스트리별 비교 요약
+
+| 레지스트리 | 주소 형식 | 주요 특징 | 인증 방식 |
+|---|---|---|---|
+| Docker Hub | `<id>/<image>:<tag>` | 공개 레지스트리, 무료 플랜 제한 있음 | `docker login` |
+| AWS ECR | `<account>.dkr.ecr.<region>.amazonaws.com/<repo>` | AWS IAM 연동, 프라이빗 | AWS CLI + `docker login` |
+| Harbor | `<harbor-host>/<project>/<image>:<tag>` | 온프레미스, 취약점 스캔, 정책 관리 | `docker login <harbor-host>` |
+| GitHub GHCR | `ghcr.io/<owner>/<image>:<tag>` | GitHub 저장소 연동, CI/CD 통합 | PAT 또는 `GITHUB_TOKEN` |
+
+---
+
 ## 수업 보강 가이드
 <!-- course-boost-foundation-v1 -->
 
