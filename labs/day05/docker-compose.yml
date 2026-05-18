@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    networks: [appnet]
+
+  api:
+    image: your-api-image:latest
+    container_name: api
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+    networks: [appnet]
+
+networks:
+  appnet:
+    driver: bridge

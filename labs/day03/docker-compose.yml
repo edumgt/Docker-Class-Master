@@ -1,0 +1,6 @@
+services:
+  hello-api:
+    image: hello-api:dev
+    container_name: hello-api
+    ports:
+      - "3000:3000"

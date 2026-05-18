@@ -1,0 +1,41 @@
+services:
+  memtest:
+    image: python:3.12-alpine
+    container_name: memtest
+    command: ["python3", "-c", "a='a'*10**8; print(len(a))"]
+    mem_limit: 128m
+    profiles: ["oom"]
+
+  restart-test:
+    image: alpine
+    container_name: restart-test
+    command: ["sh", "-c", "exit 1"]
+    restart: always
+
+  bind-check:
+    image: alpine
+    container_name: bind-check
+    working_dir: /work
+    command: ["ls", "-al"]
+    volumes:
+      - ./:/work
+    profiles: ["mount"]
+
+  volume-writer:
+    image: alpine
+    container_name: volume-writer
+    command: ["sh", "-c", "echo hi > /data/hi.txt"]
+    volumes:
+      - myvol:/data
+    profiles: ["volume"]
+
+  volume-reader:
+    image: alpine
+    container_name: volume-reader
+    command: ["cat", "/data/hi.txt"]
+    volumes:
+      - myvol:/data
+    profiles: ["volume"]
+
+volumes:
+  myvol:
