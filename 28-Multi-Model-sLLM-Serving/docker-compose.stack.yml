@@ -3,24 +3,29 @@ services:
     image: ollama/ollama:latest
     container_name: ollama
     ports:
-      - "11434:11434"
+    - 11434:11434
     volumes:
-      - ollama-data:/root/.ollama
+    - ollama-data:/root/.ollama
     restart: unless-stopped
-
+    networks:
+    - shared-net
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     ports:
-      - "3000:8080"
+    - 3000:8080
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+    - OLLAMA_BASE_URL=http://ollama:11434
     volumes:
-      - open-webui-data:/app/backend/data
+    - open-webui-data:/app/backend/data
     depends_on:
-      - ollama
+    - ollama
     restart: unless-stopped
-
+    networks:
+    - shared-net
 volumes:
-  ollama-data:
-  open-webui-data:
+  ollama-data: null
+  open-webui-data: null
+networks:
+  shared-net:
+    external: true

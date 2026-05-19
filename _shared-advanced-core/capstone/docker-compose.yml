@@ -6,9 +6,9 @@ services:
       POSTGRES_PASSWORD: app
       POSTGRES_DB: app
     volumes:
-      - db_data:/var/lib/postgresql/data
-    networks: [backend]
-
+    - db_data:/var/lib/postgresql/data
+    networks:
+    - shared-net
   api:
     build:
       context: ./api
@@ -16,22 +16,19 @@ services:
     environment:
       DATABASE_URL: postgres://app:app@db:5432/app
     depends_on:
-      - db
-    networks: [backend, frontend]
-
+    - db
+    networks:
+    - shared-net
   web:
     image: nginx:alpine
     ports:
-      - "80:80"
+    - 80:80
     depends_on:
-      - api
-    networks: [frontend]
-
+    - api
+    networks:
+    - shared-net
 volumes:
-  db_data:
-
+  db_data: null
 networks:
-  backend:
-    driver: bridge
-  frontend:
-    driver: bridge
+  shared-net:
+    external: true

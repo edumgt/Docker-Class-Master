@@ -3,17 +3,22 @@ services:
     image: ollama/ollama:latest
     container_name: ollama-gpu
     ports:
-      - "11434:11434"
+    - 11434:11434
     volumes:
-      - ollama-gpu-data:/root/.ollama
+    - ollama-gpu-data:/root/.ollama
     restart: unless-stopped
     deploy:
       resources:
         reservations:
           devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
+          - driver: nvidia
+            count: all
+            capabilities:
+            - gpu
+    networks:
+    - shared-net
 volumes:
-  ollama-gpu-data:
+  ollama-gpu-data: null
+networks:
+  shared-net:
+    external: true

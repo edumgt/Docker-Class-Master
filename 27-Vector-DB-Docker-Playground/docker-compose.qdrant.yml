@@ -3,11 +3,15 @@ services:
     image: qdrant/qdrant:v1.13.2
     container_name: qdrant
     ports:
-      - "6333:6333"
-      - "6334:6334"
+    - 6333:6333
+    - 6334:6334
     volumes:
-      - qdrant-data:/qdrant/storage
+    - qdrant-data:/qdrant/storage
     restart: unless-stopped
-
+    networks:
+    - shared-net
 volumes:
-  qdrant-data:
+  qdrant-data: null
+networks:
+  shared-net:
+    external: true

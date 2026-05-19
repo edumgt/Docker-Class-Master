@@ -1,43 +1,36 @@
 name: devsecops-lab
-
 networks:
-  edge:
-    driver: bridge
-  platform:
-    driver: bridge
-
+  shared-net:
+    external: true
 volumes:
-  postgres_data:
-  keycloak_data:
-  vault_data:
-  prometheus_data:
-  grafana_data:
-  loki_data:
-  harbor_db_data:
-  harbor_registry_data:
-  harbor_redis_data:
-
+  postgres_data: null
+  keycloak_data: null
+  vault_data: null
+  prometheus_data: null
+  grafana_data: null
+  loki_data: null
+  harbor_db_data: null
+  harbor_registry_data: null
+  harbor_redis_data: null
 services:
   traefik:
     image: traefik:v3.1
     command:
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --serversTransport.insecureSkipVerify=true
+    - --api.insecure=true
+    - --providers.docker=true
+    - --providers.docker.exposedbydefault=false
+    - --entrypoints.web.address=:80
+    - --entrypoints.websecure.address=:443
+    - --serversTransport.insecureSkipVerify=true
     ports:
-      - "80:80"
-      - "443:443"
-      - "8088:8080"
+    - 80:80
+    - 443:443
+    - 8088:8080
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik:/etc/traefik
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+    - ./traefik:/etc/traefik
     networks:
-      - edge
-      - platform
-
+    - shared-net
   postgres:
     image: postgres:16
     environment:
@@ -45,13 +38,13 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak123
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+    - postgres_data:/var/lib/postgresql/data
     networks:
-      - platform
-
+    - shared-net
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.5
-    command: ["start-dev"]
+    command:
+    - start-dev
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: postgres
@@ -62,160 +55,157 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin123
       KC_PROXY: edge
     depends_on:
-      - postgres
+    - postgres
     networks:
-      - platform
-      - edge
+    - shared-net
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)
-      - traefik.http.routers.keycloak.entrypoints=web
-      - traefik.http.services.keycloak.loadbalancer.server.port=8080
-
+    - traefik.enable=true
+    - traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)
+    - traefik.http.routers.keycloak.entrypoints=web
+    - traefik.http.services.keycloak.loadbalancer.server.port=8080
   vault:
     image: hashicorp/vault:1.17
     cap_add:
-      - IPC_LOCK
+    - IPC_LOCK
     environment:
       VAULT_DEV_ROOT_TOKEN_ID: root
       VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
-    command: ["vault", "server", "-dev", "-dev-root-token-id=root"]
+    command:
+    - vault
+    - server
+    - -dev
+    - -dev-root-token-id=root
     volumes:
-      - vault_data:/vault/file
+    - vault_data:/vault/file
     networks:
-      - platform
-      - edge
+    - shared-net
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.vault.rule=Host(`vault.localhost`)
-      - traefik.http.routers.vault.entrypoints=web
-      - traefik.http.services.vault.loadbalancer.server.port=8200
-
+    - traefik.enable=true
+    - traefik.http.routers.vault.rule=Host(`vault.localhost`)
+    - traefik.http.routers.vault.entrypoints=web
+    - traefik.http.services.vault.loadbalancer.server.port=8200
   trivy:
     image: aquasec/trivy:0.56.2
-    entrypoint: ["/bin/sh", "-c"]
-    command: ["sleep infinity"]
+    entrypoint:
+    - /bin/sh
+    - -c
+    command:
+    - sleep infinity
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./:/workspace
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./:/workspace
     working_dir: /workspace
     networks:
-      - platform
-
+    - shared-net
   prometheus:
     image: prom/prometheus:v2.54.1
     command:
-      - --config.file=/etc/prometheus/prometheus.yml
-      - --storage.tsdb.path=/prometheus
-      - --web.enable-lifecycle
+    - --config.file=/etc/prometheus/prometheus.yml
+    - --storage.tsdb.path=/prometheus
+    - --web.enable-lifecycle
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
-      - prometheus_data:/prometheus
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+    - prometheus_data:/prometheus
     networks:
-      - platform
-      - edge
+    - shared-net
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)
-      - traefik.http.routers.prometheus.entrypoints=web
-      - traefik.http.services.prometheus.loadbalancer.server.port=9090
-
+    - traefik.enable=true
+    - traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)
+    - traefik.http.routers.prometheus.entrypoints=web
+    - traefik.http.services.prometheus.loadbalancer.server.port=9090
   alertmanager:
     image: prom/alertmanager:v0.27.0
     command:
-      - --config.file=/etc/alertmanager/alertmanager.yml
-      - --storage.path=/alertmanager
+    - --config.file=/etc/alertmanager/alertmanager.yml
+    - --storage.path=/alertmanager
     volumes:
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     networks:
-      - platform
-
+    - shared-net
   grafana:
     image: grafana/grafana:11.2.2
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin123
     volumes:
-      - grafana_data:/var/lib/grafana
+    - grafana_data:/var/lib/grafana
     depends_on:
-      - prometheus
-      - loki
+    - prometheus
+    - loki
     networks:
-      - platform
-      - edge
+    - shared-net
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
-      - traefik.http.routers.grafana.entrypoints=web
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
-
+    - traefik.enable=true
+    - traefik.http.routers.grafana.rule=Host(`grafana.localhost`)
+    - traefik.http.routers.grafana.entrypoints=web
+    - traefik.http.services.grafana.loadbalancer.server.port=3000
   loki:
     image: grafana/loki:3.1.1
-    command: ["-config.file=/etc/loki/local-config.yaml"]
+    command:
+    - -config.file=/etc/loki/local-config.yaml
     volumes:
-      - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
-      - loki_data:/loki
+    - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
+    - loki_data:/loki
     networks:
-      - platform
-
+    - shared-net
   promtail:
     image: grafana/promtail:3.1.1
-    command: ["-config.file=/etc/promtail/config.yml"]
+    command:
+    - -config.file=/etc/promtail/config.yml
     volumes:
-      - ./promtail/config.yml:/etc/promtail/config.yml:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+    - ./promtail/config.yml:/etc/promtail/config.yml:ro
+    - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - platform
+    - shared-net
     depends_on:
-      - loki
-
+    - loki
   step-ca:
     image: smallstep/step-ca:0.27.4
-    profiles: ["private-ca"]
+    profiles:
+    - private-ca
     environment:
       DOCKER_STEPCA_INIT_NAME: Local Private CA
       DOCKER_STEPCA_INIT_DNS_NAMES: step-ca,step-ca.localhost
-      DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT: "true"
+      DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT: 'true'
       DOCKER_STEPCA_INIT_PASSWORD: password
     ports:
-      - "9000:9000"
+    - 9000:9000
     networks:
-      - platform
-
+    - shared-net
   harbor-db:
     image: goharbor/harbor-db:v2.11.1
-    profiles: ["harbor"]
+    profiles:
+    - harbor
     environment:
       POSTGRES_DB: registry
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Harbor12345
     volumes:
-      - harbor_db_data:/var/lib/postgresql/data
+    - harbor_db_data:/var/lib/postgresql/data
     networks:
-      - platform
-
+    - shared-net
   harbor-redis:
     image: goharbor/redis-photon:v2.11.1
-    profiles: ["harbor"]
+    profiles:
+    - harbor
     volumes:
-      - harbor_redis_data:/var/lib/redis
+    - harbor_redis_data:/var/lib/redis
     networks:
-      - platform
-
+    - shared-net
   harbor-registry:
     image: goharbor/registry-photon:v2.11.1
-    profiles: ["harbor"]
+    profiles:
+    - harbor
     environment:
       REGISTRY_HTTP_ADDR: :5000
     volumes:
-      - harbor_registry_data:/storage
+    - harbor_registry_data:/storage
     networks:
-      - platform
-      - edge
+    - shared-net
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.harbor-registry.rule=Host(`harbor-registry.localhost`)
-      - traefik.http.routers.harbor-registry.entrypoints=web
-      - traefik.http.services.harbor-registry.loadbalancer.server.port=5000
+    - traefik.enable=true
+    - traefik.http.routers.harbor-registry.rule=Host(`harbor-registry.localhost`)
+    - traefik.http.routers.harbor-registry.entrypoints=web
+    - traefik.http.services.harbor-registry.loadbalancer.server.port=5000

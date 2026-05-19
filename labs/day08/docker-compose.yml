@@ -3,11 +3,20 @@ services:
     image: nginx:alpine
     container_name: debug-target
     ports:
-      - "8081:80"
-
+    - 8081:80
+    networks:
+    - shared-net
   observer:
     image: alpine
     container_name: observer
-    command: ["sh", "-c", "sleep infinity"]
+    command:
+    - sh
+    - -c
+    - sleep infinity
     depends_on:
-      - debug-target
+    - debug-target
+    networks:
+    - shared-net
+networks:
+  shared-net:
+    external: true

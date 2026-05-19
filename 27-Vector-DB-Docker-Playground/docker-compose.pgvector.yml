@@ -7,10 +7,14 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-CHANGE_THIS_PASSWORD_BEFORE_USE}
       POSTGRES_DB: vectordb
     ports:
-      - "5432:5432"
+    - 5432:5432
     volumes:
-      - pgvector-data:/var/lib/postgresql/data
+    - pgvector-data:/var/lib/postgresql/data
     restart: unless-stopped
-
+    networks:
+    - shared-net
 volumes:
-  pgvector-data:
+  pgvector-data: null
+networks:
+  shared-net:
+    external: true

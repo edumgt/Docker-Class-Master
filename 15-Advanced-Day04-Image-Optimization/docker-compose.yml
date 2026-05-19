@@ -3,4 +3,9 @@ services:
     image: hello-api:dev
     container_name: hello-api
     ports:
-      - "3000:3000"
+    - 3000:3000
+    networks:
+    - shared-net
+networks:
+  shared-net:
+    external: true

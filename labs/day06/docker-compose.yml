@@ -5,9 +5,13 @@ services:
     environment:
       POSTGRES_PASSWORD: app
     ports:
-      - "5432:5432"
+    - 5432:5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
-
+    - pgdata:/var/lib/postgresql/data
+    networks:
+    - shared-net
 volumes:
-  pgdata:
+  pgdata: null
+networks:
+  shared-net:
+    external: true

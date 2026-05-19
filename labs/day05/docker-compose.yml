@@ -2,17 +2,17 @@ services:
   db:
     image: postgres:16-alpine
     container_name: db
-    networks: [appnet]
-
+    networks:
+    - shared-net
   api:
     image: your-api-image:latest
     container_name: api
     environment:
       DB_HOST: db
     depends_on:
-      - db
-    networks: [appnet]
-
+    - db
+    networks:
+    - shared-net
 networks:
-  appnet:
-    driver: bridge
+  shared-net:
+    external: true

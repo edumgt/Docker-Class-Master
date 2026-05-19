@@ -2,40 +2,65 @@ services:
   memtest:
     image: python:3.12-alpine
     container_name: memtest
-    command: ["python3", "-c", "a='a'*10**8; print(len(a))"]
+    command:
+    - python3
+    - -c
+    - a='a'*10**8; print(len(a))
     mem_limit: 128m
-    profiles: ["oom"]
-
+    profiles:
+    - oom
+    networks:
+    - shared-net
   restart-test:
     image: alpine
     container_name: restart-test
-    command: ["sh", "-c", "exit 1"]
+    command:
+    - sh
+    - -c
+    - exit 1
     restart: always
-
+    networks:
+    - shared-net
   bind-check:
     image: alpine
     container_name: bind-check
     working_dir: /work
-    command: ["ls", "-al"]
+    command:
+    - ls
+    - -al
     volumes:
-      - ./:/work
-    profiles: ["mount"]
-
+    - ./:/work
+    profiles:
+    - mount
+    networks:
+    - shared-net
   volume-writer:
     image: alpine
     container_name: volume-writer
-    command: ["sh", "-c", "echo hi > /data/hi.txt"]
+    command:
+    - sh
+    - -c
+    - echo hi > /data/hi.txt
     volumes:
-      - myvol:/data
-    profiles: ["volume"]
-
+    - myvol:/data
+    profiles:
+    - volume
+    networks:
+    - shared-net
   volume-reader:
     image: alpine
     container_name: volume-reader
-    command: ["cat", "/data/hi.txt"]
+    command:
+    - cat
+    - /data/hi.txt
     volumes:
-      - myvol:/data
-    profiles: ["volume"]
-
+    - myvol:/data
+    profiles:
+    - volume
+    networks:
+    - shared-net
 volumes:
-  myvol:
+  myvol: null
+networks:
+  shared-net:
+    external: true

@@ -5,15 +5,18 @@ services:
     environment:
       POSTGRES_DB: odoo
       POSTGRES_USER: odoo
-      POSTGRES_PASSWORD: "123456"
+      POSTGRES_PASSWORD: '123456'
     volumes:
-      - odoo_official_pg_data:/var/lib/postgresql/data
+    - odoo_official_pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U odoo -d odoo"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U odoo -d odoo
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   odoo-official-web:
     image: odoo:18
     container_name: odoo-official-web
@@ -22,42 +25,50 @@ services:
         condition: service_healthy
     environment:
       HOST: odoo-official-rdbms
-      PORT: "5432"
+      PORT: '5432'
       USER: odoo
-      PASSWORD: "123456"
+      PASSWORD: '123456'
     command:
-      [
-        "odoo",
-        "-d",
-        "odoo_official",
-        "--db-filter=^odoo_official$"
-      ]
+    - odoo
+    - -d
+    - odoo_official
+    - --db-filter=^odoo_official$
     ports:
-      - "9060:8069"
-
+    - 9060:8069
+    networks:
+    - shared-net
   erpnext-official-rdbms:
     image: mariadb:11
     container_name: erpnext-official-rdbms
-    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    command:
+    - --character-set-server=utf8mb4
+    - --collation-server=utf8mb4_unicode_ci
     environment:
-      MARIADB_ROOT_PASSWORD: "123456"
+      MARIADB_ROOT_PASSWORD: '123456'
     volumes:
-      - erpnext_official_mariadb_data:/var/lib/mysql
+    - erpnext_official_mariadb_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -u root -p123456 --silent"]
+      test:
+      - CMD-SHELL
+      - mariadb-admin ping -u root -p123456 --silent
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   erpnext-official-redis:
     image: redis:7-alpine
     container_name: erpnext-official-redis
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   erpnext-official-web:
     image: frappe/erpnext:version-15
     container_name: erpnext-official-web
@@ -67,25 +78,29 @@ services:
       erpnext-official-redis:
         condition: service_healthy
     volumes:
-      - erpnext_official_sites:/home/frappe/frappe-bench/sites
+    - erpnext_official_sites:/home/frappe/frappe-bench/sites
     ports:
-      - "9061:8000"
-
+    - 9061:8000
+    networks:
+    - shared-net
   tryton-official-rdbms:
     image: postgres:16-alpine
     container_name: tryton-official-rdbms
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: tryton
-      POSTGRES_PASSWORD: "123456"
+      POSTGRES_PASSWORD: '123456'
     volumes:
-      - tryton_official_pg_data:/var/lib/postgresql/data
+    - tryton_official_pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tryton -d postgres"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U tryton -d postgres
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   tryton-official-web:
     image: tryton/tryton:latest
     container_name: tryton-official-web
@@ -94,59 +109,79 @@ services:
         condition: service_healthy
     environment:
       DB_USER: tryton
-      DB_PASSWORD: "123456"
+      DB_PASSWORD: '123456'
       DB_HOSTNAME: tryton-official-rdbms
-      DB_PORT: "5432"
+      DB_PORT: '5432'
     ports:
-      - "9062:8000"
-
+    - 9062:8000
+    networks:
+    - shared-net
   taiga-official-front:
     image: taigaio/taiga-front:latest
     container_name: taiga-official-front
     ports:
-      - "9063:80"
-
+    - 9063:80
+    networks:
+    - shared-net
   zulip-official-rdbms:
     image: postgres:16-alpine
     container_name: zulip-official-rdbms
     environment:
       POSTGRES_DB: zulip
       POSTGRES_USER: zulip
-      POSTGRES_PASSWORD: "123456"
+      POSTGRES_PASSWORD: '123456'
     volumes:
-      - zulip_official_pg_data:/var/lib/postgresql/data
+    - zulip_official_pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U zulip -d zulip"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U zulip -d zulip
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   zulip-official-rabbitmq:
     image: rabbitmq:3.13-alpine
     container_name: zulip-official-rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: zulip
-      RABBITMQ_DEFAULT_PASS: "123456"
+      RABBITMQ_DEFAULT_PASS: '123456'
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      test:
+      - CMD
+      - rabbitmq-diagnostics
+      - -q
+      - ping
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   zulip-official-redis:
     image: redis:7-alpine
     container_name: zulip-official-redis
-    command: ["redis-server", "--requirepass", "123456"]
+    command:
+    - redis-server
+    - --requirepass
+    - '123456'
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "123456", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - -a
+      - '123456'
+      - ping
       interval: 10s
       timeout: 5s
       retries: 20
-
+    networks:
+    - shared-net
   zulip-official-memcached:
     image: memcached:1.6-alpine
     container_name: zulip-official-memcached
-
+    networks:
+    - shared-net
   zulip-official-web:
     image: zulip/docker-zulip:latest
     container_name: zulip-official-web
@@ -160,42 +195,38 @@ services:
     environment:
       DB_HOST: zulip-official-rdbms
       DB_USER: zulip
-      DB_HOST_PORT: "5432"
+      DB_HOST_PORT: '5432'
       DB_NAME: zulip
-      DISABLE_HTTPS: "True"
+      DISABLE_HTTPS: 'True'
       SSL_CERTIFICATE_GENERATION: self-signed
-      LOADBALANCER_IPS: "172.28.0.1"
+      LOADBALANCER_IPS: 172.28.0.1
       SETTING_EXTERNAL_HOST: 127.0.0.1
       SETTING_ZULIP_ADMINISTRATOR: admin@example.com
       SETTING_RABBITMQ_HOST: zulip-official-rabbitmq
       SETTING_RABBITMQ_USER: zulip
       SETTING_REDIS_HOST: zulip-official-redis
       SETTING_MEMCACHED_LOCATION: zulip-official-memcached:11211
-      SETTING_PASSWORD_MIN_GUESSES: "1"
+      SETTING_PASSWORD_MIN_GUESSES: '1'
       SETTING_FAKE_EMAIL_DOMAIN: example.com
-      SETTING_SESSION_COOKIE_SECURE: "False"
-      SETTING_CSRF_COOKIE_SECURE: "False"
-      SETTING_SECURE_SSL_REDIRECT: "False"
-      SECRETS_postgres_password: "123456"
-      SECRETS_rabbitmq_password: "123456"
-      SECRETS_redis_password: "123456"
+      SETTING_SESSION_COOKIE_SECURE: 'False'
+      SETTING_CSRF_COOKIE_SECURE: 'False'
+      SETTING_SECURE_SSL_REDIRECT: 'False'
+      SECRETS_postgres_password: '123456'
+      SECRETS_rabbitmq_password: '123456'
+      SECRETS_redis_password: '123456'
     volumes:
-      - zulip_official_data:/data
+    - zulip_official_data:/data
     ports:
-      - "9064:80"
-
+    - 9064:80
+    networks:
+    - shared-net
 volumes:
-  odoo_official_pg_data:
-  erpnext_official_mariadb_data:
-  erpnext_official_sites:
-  tryton_official_pg_data:
-  zulip_official_pg_data:
-  zulip_official_data:
-
+  odoo_official_pg_data: null
+  erpnext_official_mariadb_data: null
+  erpnext_official_sites: null
+  tryton_official_pg_data: null
+  zulip_official_pg_data: null
+  zulip_official_data: null
 networks:
-  default:
-    name: official-ui-net
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
-          gateway: 172.28.0.1
+  shared-net:
+    external: true

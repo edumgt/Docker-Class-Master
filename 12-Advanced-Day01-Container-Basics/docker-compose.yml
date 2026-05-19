@@ -2,9 +2,15 @@ services:
   hello:
     image: nginx:alpine
     container_name: hello
-
+    networks:
+    - shared-net
   web:
     image: nginx:alpine
     container_name: web
     ports:
-      - "8080:80"
+    - 8080:80
+    networks:
+    - shared-net
+networks:
+  shared-net:
+    external: true
